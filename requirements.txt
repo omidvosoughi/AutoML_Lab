@@ -1,0 +1,16 @@
+numpy
+cython
+pyparsing
+scipy
+pandas
+scikit-learn
+configspace
+Pyro4
+oslo.concurrency
+openml
+pytest
+ConfigSpace
+
+git+https://github.com/automl/HPOBench.git@master
+
+# add your requirements below this line 

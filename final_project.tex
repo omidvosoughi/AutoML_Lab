@@ -1,0 +1,121 @@
+% !TeX spellcheck = en_US
+\documentclass{exam}
+\usepackage{amsmath, amsfonts}
+\usepackage{bm}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage[super]{nth}
+\usepackage{booktabs}
+\usepackage{fancyvrb} % for "\Verb" macro
+
+\DeclareMathOperator*{\argmin}{argmin}
+
+\usepackage[hyperfootnotes=false]{hyperref}
+
+\usepackage[usenames,dvipsnames]{color}
+\newcommand{\note}[1]{
+	\noindent~\\
+	\vspace{0.25cm}
+	\fcolorbox{Red}{Orange}{\parbox{0.99\textwidth}{#1\\}}
+	%{\parbox{0.99\textwidth}{#1\\}}
+	\vspace{0.25cm}
+}
+
+
+\input{../macros}
+%\renewcommand{\hide}[1]{#1}
+
+\qformat{\thequestion. \textbf{\thequestiontitle}\hfill[\thepoints]}
+\bonusqformat{\thequestion. \textbf{\thequestiontitle}\hfill[\thepoints]}
+
+\pagestyle{headandfoot}
+
+%%%%%% MODIFY FOR EACH SHEET!!!! %%%%%%
+\newcommand{\duedate}{18.12.20 (18:00)}
+\newcommand{\due}{{\bf This assignment is due on \duedate.} }
+\firstpageheader
+{Due: \duedate \\}
+{{\bf\lecture}\\ \assignment{5}}
+{\lectors\\ \semester}
+
+\runningheader
+{Due: \duedate}
+{\assignment{5}}
+{\semester}
+%%%%%% MODIFY FOR EACH SHEET!!!! %%%%%%
+
+\firstpagefooter
+{}
+{\thepage}
+{}
+
+\runningfooter
+{}
+{\thepage}
+{}
+
+\headrule
+\pointsinrightmargin
+\bracketedpoints
+\marginpointname{.pt}
+
+
+\newcommand{\parents}{p}
+\newcommand{\negation}[1]{\overline{#1}}
+%\newcommand{\tuple}[1]{\langle #1 \rangle}
+\newcommand{\tuple}[1]{\left<#1\right>}
+\newcommand{\dom}[1]{dom(#1)}              % domain
+
+\newcommand{\false}{false}
+\newcommand{\true}{true}
+\newcommand{\TRUE}{{\mbox{\scriptsize \em TRUE}}}
+\newcommand{\FALSE}{{\mbox{\scriptsize \em FALSE}}}
+
+\newcommand{\bSigma}{\bm{\Sigma}}
+\newcommand{\bmu}{\bm{\mu}}
+\newcommand{\bx}{\bm{x}}
+\newcommand{\by}{\bm{y}}
+\newcommand{\bX}{\bm{X}}
+\newcommand{\bI}{\bm{I}}
+\newcommand{\bw}{\bm{w}}
+\newcommand{\ba}{\bm{a}}
+\newcommand{\bb}{\bm{b}}
+\newcommand{\bk}{\bm{k}}
+\newcommand{\inv}{^{-1}}
+
+\newcommand{\norm}{{\mathcal{N}}}
+
+\newcommand\transpose{^{\textrm{\tiny{\sf{T}}}}}
+
+\begin{document}
+	\gccs
+	We have learned all the components for building a first AutoML optimizer. Now we want to use these components to build a full AutoML pipeline and win an internal competition. In this competition, we will provide three training datasets to you where you can evaluate your AutoML models locally. Another 2 unseen datasets will be provided as test sets -- of course, you do not have access to these. The team with the best score on the test sets will win the competition. You can use whatever techniques you have implemented in this lab course previously: Bayesian optimization, evolutionary algorithms, meta-learning, etc. Of course, you can also add your own ideas. However, your model should be built based on your own implementation, i.e., you can not use any of the existing AutoML packages (e.g. autosklearn, skopt, opentuner, nevergrad, etc.) to win the competition.
+	
+	Basically, your model should be trained with a training-validation set (you can freely split into training and validation set) to determine a well-performing model and its configuration in the given time. The finally returned hyperparameter configuration is then fitted to the training data and evaluated on the test set. Your system will be given $20$ minutes to be optimized on each dataset -- you need to be efficient!
+	
+	Both training and test datasets are binary classification problems only. There is no missing data; no categorical features in the datasets. However, the number of features and instances might differ. %You need to trade-off different fidelities.  
+	
+	The score is computed with balanced accuracy (\texttt{BAC}), which is the average of \texttt{sensitivity (true positive rate)} and \texttt{specificity (true negative rate)}:
+	\begin{equation}
+	    BAC = \frac{1}{2}\left[ \frac{TP}{P}+\frac{TN}{N}\right]
+	\end{equation}
+	
+	where $P (N)$ is the number of positive (negative) examples, $TP (TN)$ is the number of correctly classified positive (negative) examples. Then \texttt{BAC} will be normalized with:
+	\begin{equation}
+	    \left| BAC \right| = (BAC-R)/(1-R)
+	\end{equation}
+	where $R=0.5$ for our binary classifier problem.
+	
+	In general, you need to implement the following pieces:
+	\begin{enumerate}
+	    \item \texttt{Configuration Space}:   \texttt{sklearn\_configspace.py} provides several configuration spaces for different \texttt{sklearn} models. One idea could be to need to merge them into a single configuration space to let your optimizer have more choices.
+	    \item \texttt{Run History}: you need to implement \texttt{RunHistory} in \texttt{util.py} by yourself, notice that this time runhistroy might not store a simple list as the previous exercises sections. 
+	    \item \texttt{Initialization}: you need to initialize your configurations (and fidelities). %Once the overall budget is exhausted, the optimizer will be forced to be terminated.
+	    \item \texttt{Optimization loops}: you need to implement the main optimization loop of your AutoML system. Once the overall budget is exhausted, the optimizer will be forced to terminated
+	    \item You can add whatever you want to boost your performance.
+	\end{enumerate}
+	Please upload your implementation to your GitHub repository before the deadline. We will only evaluate your last submission before the deadline, any submissions after that will be ignored. 
+	
+	%Your model will be evaluated on 2 additional datasets to determine its final scores.
+
+\end{document} 
